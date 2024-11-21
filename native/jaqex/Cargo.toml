@@ -1,13 +1,17 @@
 [package]
-name = "jaqex"
-version = "0.1.0"
+name = 'jaqex'
+version = '0.1.0'
 authors = ['Shaolang Ai']
-edition = "2021"
+edition = '2021'
 
 [lib]
-name = "jaqex"
-path = "src/lib.rs"
-crate-type = ["cdylib"]
+name = 'jaqex'
+path = 'src/lib.rs'
+crate-type = ['cdylib']
 
 [dependencies]
-rustler = "0.34.0"
+jaq-core   = '2.0.0-delta'
+jaq-std    = '2.0.0-delta'
+jaq-json   = '1.0.0-delta'
+rustler    = '0.34.0'
+serde_json = '1.0.133'
