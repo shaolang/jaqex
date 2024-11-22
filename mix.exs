@@ -15,6 +15,8 @@ defmodule Jaqex.MixProject do
 
   defp deps do
     [
+      {:jason, "~> 1.4"},
+      {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false},
       {:rustler, "~> 0.35", runtime: false}
     ]
   end

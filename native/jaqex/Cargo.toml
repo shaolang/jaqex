@@ -12,6 +12,6 @@ crate-type = ['cdylib']
 [dependencies]
 jaq-core   = '2.0.0-delta'
 jaq-std    = '2.0.0-delta'
-jaq-json   = '1.0.0-delta'
-rustler    = '0.34.0'
+jaq-json   = { version = '1.0.0-delta', features = ['serde_json'] }
+rustler    = { version = '0.35.0', features = ['serde'] }
 serde_json = '1.0.133'
