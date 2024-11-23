@@ -5,7 +5,7 @@ use rustler::{self, Encoder, SerdeTerm};
 use serde_json::Value;
 
 #[rustler::nif]
-fn parse(json_doc: &str, code: &str, path: &str) -> impl Encoder {
+fn _parse(json_doc: &str, code: &str, path: &str) -> impl Encoder {
     let filter = create_filter(code, path);
     let input: Value = serde_json::from_str(json_doc).unwrap();
     let inputs = RcIter::new(core::iter::empty::<Result<Val, String>>());
