@@ -4,7 +4,7 @@ use jaq_json::Val;
 use rustler::{self, Encoder, SerdeTerm};
 use serde_json::Value;
 
-#[rustler::nif]
+#[rustler::nif(schedule="DirtyCpu")]
 fn _parse(json_doc: &str, code: &str, path: &str) -> impl Encoder {
     let filter = create_filter(code, path);
     let input: Value = serde_json::from_str(json_doc).unwrap();
