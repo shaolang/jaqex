@@ -25,4 +25,18 @@ defmodule JaqexTest do
       assert Jaqex.parse("[1, 2, 3", ".[]") == {:error, :invalid_json}
     end
   end
+
+  describe "parse_file/3" do
+    test "returns results without erroring when file exists" do
+      actual = Jaqex.parse_file("priv/test.json", ".[] | {baz: .foo, qux: .bar}")
+
+      assert actual == {:ok, [%{"baz" => 1, "qux" => 2}, %{"baz" => 10, "qux" => 20}]}
+    end
+
+    test "returns error tuple when file doesn't exist" do
+      actual = Jaqex.parse_file("doesnt-exists.json", ".[]")
+
+      assert actual == {:error, :file_not_found}
+    end
+  end
 end
