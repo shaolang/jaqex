@@ -13,8 +13,16 @@ defmodule JaqexTest do
         given = Jason.encode!(unquote(Macro.escape(given)))
         actual = Jaqex.parse(given, unquote(code))
 
-        assert actual == unquote(Macro.escape(expected))
+        assert actual == {:ok, unquote(Macro.escape(expected))}
       end
+    end
+
+    test "returns error tuple when given filter is invalid" do
+      assert Jaqex.parse(Jason.encode!([]), "][") == {:error, :invalid_filter}
+    end
+
+    test "returns error tuple when given json_doc is invalid" do
+      assert Jaqex.parse("[1, 2, 3", ".[]") == {:error, :invalid_json}
     end
   end
 end
