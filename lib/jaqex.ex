@@ -8,6 +8,8 @@ defmodule Jaqex do
   use RustlerPrecompiled,
     base_url: "#{source_url}/releases/download/v#{version}",
     crate: :jaqex,
+    force_build: String.downcase(System.get_env("FORCE_JAQEX_BUILD", "0")) in ["1", "true"],
+    nif_versions: ["2.15", "2.16", "2.17"],
     otp_app: :jaqex,
     version: version
 
