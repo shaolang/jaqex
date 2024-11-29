@@ -2,7 +2,14 @@ defmodule Jaqex do
   @moduledoc """
   Documentation for `Jaqex`.
   """
-  use Rustler, otp_app: :jaqex, crate: :jaqex
+  source_url = Mix.Project.config()[:source_url]
+  version = Mix.Project.config()[:version]
+
+  use RustlerPrecompiled,
+    base_url: "#{source_url}/releases/download/v#{version}",
+    crate: :jaqex,
+    otp_app: :jaqex,
+    version: version
 
   def parse(json_doc, code, path \\ "") do
     result = nif_parse(json_doc, code, path)
