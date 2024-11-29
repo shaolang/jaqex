@@ -11,31 +11,47 @@ defmodule Jaqex do
     otp_app: :jaqex,
     version: version
 
-  def parse(json_doc, code, path \\ "") do
-    parse!(json_doc, code, path)
+  @doc """
+  Filter the given JSON string with the given j(a)q code.
+  """
+  @spec filter(String.t(), String.t(), Path.t()) :: {:ok, term} | {:error, term}
+  def filter(json_doc, code, path \\ "") do
+    filter!(json_doc, code, path)
   rescue
     e -> error(e)
   end
 
-  def parse!(json_doc, code, path \\ "") do
-    result = nif_parse(json_doc, code, path)
+  @doc """
+  Filter the given JSON string with the given j(a)q code, raising on errors.
+  """
+  @spec filter!(String.t(), String.t(), Path.t()) :: term
+  def filter!(json_doc, code, path \\ "") do
+    result = nif_filter(json_doc, code, path)
     {:ok, if(length(result) == 1, do: List.first(result), else: result)}
   end
 
-  def parse_file(fname, code, path \\ "") do
-    parse_file!(fname, code, path)
+  @doc """
+  Filter the JSON in the given file with the given j(a)q code.
+  """
+  @spec filter_file(Path.t(), String.t(), Path.t()) :: {:ok, term} | {:error, term}
+  def filter_file(fname, code, path \\ "") do
+    filter_file!(fname, code, path)
   rescue
     e -> error(e)
   end
 
-  def parse_file!(fname, code, path \\ "") do
-    result = nif_parse_file(fname, code, path)
+  @doc """
+  Filter the JSON in the given file with the given j(a)q code, raising on errors.
+  """
+  @spec filter_file!(Path.t(), String.t(), Path.t()) :: term
+  def filter_file!(fname, code, path \\ "") do
+    result = nif_filter_file(fname, code, path)
     {:ok, if(length(result) == 1, do: List.first(result), else: result)}
   end
 
   defp error(%ErlangError{original: err}), do: {:error, err}
 
-  defp nif_parse(_json_doc, _code, _path), do: :erlang.nif_error(:nif_not_loaded)
+  defp nif_filter(_json_doc, _code, _path), do: :erlang.nif_error(:nif_not_loaded)
 
-  defp nif_parse_file(_fname, _code, _path), do: :erlang.nif_error(:nif_not_loaded)
+  defp nif_filter_file(_fname, _code, _path), do: :erlang.nif_error(:nif_not_loaded)
 end

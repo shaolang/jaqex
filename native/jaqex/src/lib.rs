@@ -7,21 +7,21 @@ use std::fs::File;
 use std::io::Read;
 
 #[rustler::nif(schedule = "DirtyCpu")]
-fn nif_parse(json_doc: &str, code: &str, path: &str) -> Result<impl Encoder, Error> {
-    parse(json_doc, code, path)
+fn nif_filter(json_doc: &str, code: &str, path: &str) -> Result<impl Encoder, Error> {
+    filter(json_doc, code, path)
 }
 
 #[rustler::nif(schedule = "DirtyCpu")]
-fn nif_parse_file(fname: &str, code: &str, path: &str) -> Result<impl Encoder, Error> {
+fn nif_filter_file(fname: &str, code: &str, path: &str) -> Result<impl Encoder, Error> {
     let mut f = File::open(fname).map_err(|_| Error::RaiseAtom("file_not_found"))?;
     let mut doc = String::new();
     f.read_to_string(&mut doc)
         .map_err(|_| Error::RaiseAtom("file_error"))?;
 
-    parse(&doc, code, path)
+    filter(&doc, code, path)
 }
 
-fn parse(json_doc: &str, code: &str, path: &str) -> Result<impl Encoder, Error> {
+fn filter(json_doc: &str, code: &str, path: &str) -> Result<impl Encoder, Error> {
     let filter = create_filter(code, path)?;
     let input: Value =
         serde_json::from_str(json_doc).map_err(|_| Error::RaiseAtom("invalid_json"))?;
