@@ -12,17 +12,25 @@ defmodule Jaqex do
     version: version
 
   def parse(json_doc, code, path \\ "") do
-    result = nif_parse(json_doc, code, path)
-    {:ok, if(length(result) == 1, do: List.first(result), else: result)}
+    parse!(json_doc, code, path)
   rescue
     e -> error(e)
   end
 
-  def parse_file(fname, code, path \\ "") do
-    result = nif_parse_file(fname, code, path)
+  def parse!(json_doc, code, path \\ "") do
+    result = nif_parse(json_doc, code, path)
     {:ok, if(length(result) == 1, do: List.first(result), else: result)}
+  end
+
+  def parse_file(fname, code, path \\ "") do
+    parse_file!(fname, code, path)
   rescue
     e -> error(e)
+  end
+
+  def parse_file!(fname, code, path \\ "") do
+    result = nif_parse_file(fname, code, path)
+    {:ok, if(length(result) == 1, do: List.first(result), else: result)}
   end
 
   defp error(%ErlangError{original: err}), do: {:error, err}
