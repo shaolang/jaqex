@@ -6,5 +6,6 @@
 /doc/
 /priv
 /tmp/
+checksum-*.exs
 erl_crash.dump
 jaqex-*.tar
