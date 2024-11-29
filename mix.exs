@@ -39,7 +39,7 @@ defmodule Jaqex.MixProject do
 
   defp docs do
     [
-      main: "README",
+      main: "readme",
       name: "Jaqex",
       source_ref: "v#{@version}",
       canonical: "https://hexdocs.pm/jaqex",
@@ -53,7 +53,19 @@ defmodule Jaqex.MixProject do
       maintainers: ["Shaolang Ai"],
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/shaolang/jaqex"},
-      files: ["lib", "mix.exs", "README.md", "native", "checksum-*.exs"],
+      files: [
+        "README.md",
+        "checksum-*.exs",
+        "lib",
+        "mix.exs",
+        "native/jaqex/*.toml",
+        "native/jaqex/.cargo",
+        "native/jaqex/.gitignore",
+        "native/jaqex/Cargo.lock",
+        "native/jaqex/README.md",
+        "native/jaqex/src",
+        "priv/test.json"
+      ],
     ]
   end
 
