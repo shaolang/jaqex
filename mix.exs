@@ -7,6 +7,7 @@ defmodule Jaqex.MixProject do
   def project do
     [
       app: :jaqex,
+      aliases: aliases(),
       deps: deps(),
       description: "Wrapper for Jaq (a jq clone focused on correctness, speed, and simplicity)",
       docs: docs(),
@@ -19,6 +20,12 @@ defmodule Jaqex.MixProject do
   end
 
   def application, do: []
+
+  defp aliases do
+    [
+      "gen.checksums": &gen_checksums/1
+    ]
+  end
 
   defp deps do
     [
@@ -46,7 +53,16 @@ defmodule Jaqex.MixProject do
       maintainers: ["Shaolang Ai"],
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/shaolang/jaqex"},
-      files: ["lib", "mix.exs", "README.md", "navtive", "checksum-*.exs"],
+      files: ["lib", "mix.exs", "README.md", "native", "checksum-*.exs"],
     ]
+  end
+
+  defp gen_checksums(_) do
+    System.cmd(
+      "mix",
+      ["rustler_precompiled.download", "Jaqex", "--all", "--print"],
+      into: IO.stream(),
+      env: [{"FORCE_JAQEX_BUILD", "true"}]
+    )
   end
 end
