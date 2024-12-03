@@ -26,6 +26,18 @@ defmodule JaqexTest do
     end
   end
 
+  describe "filter!/3" do
+    test "returns (success) result not wrapped in tuple" do
+      assert Jaqex.filter!("[1,2,3]", ".[]") == [1, 2, 3]
+    end
+
+    test "throws an error when given code is invalid" do
+      assert_raise ErlangError, fn ->
+        Jaqex.filter!("[1,2]", "][")
+      end
+    end
+  end
+
   describe "filter_file/3" do
     test "returns results without erroring when file exists" do
       actual = Jaqex.filter_file("priv/test.json", ".[] | {baz: .foo, qux: .bar}")
@@ -37,6 +49,18 @@ defmodule JaqexTest do
       actual = Jaqex.filter_file("doesnt-exists.json", ".[]")
 
       assert actual == {:error, :file_not_found}
+    end
+  end
+
+  describe "filter_file!/3" do
+    test "returns (success) result not wrapped in tuple" do
+      assert Jaqex.filter_file!("priv/test.json", ".[] | {foo}") == [%{"foo" => 1}, %{"foo" => 10}]
+    end
+
+    test "throws an error when given code is invalid" do
+      assert_raise ErlangError, fn ->
+        Jaqex.filter_file!("priv/test.json", ".[.foo]")
+      end
     end
   end
 end
