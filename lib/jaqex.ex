@@ -18,7 +18,7 @@ defmodule Jaqex do
   """
   @spec filter(String.t(), String.t(), Path.t()) :: {:ok, term} | {:error, term}
   def filter(json_doc, code, path \\ "") do
-    filter!(json_doc, code, path)
+    {:ok, filter!(json_doc, code, path)}
   rescue
     e -> error(e)
   end
@@ -29,7 +29,7 @@ defmodule Jaqex do
   @spec filter!(String.t(), String.t(), Path.t()) :: term
   def filter!(json_doc, code, path \\ "") do
     result = nif_filter(json_doc, code, path)
-    {:ok, if(length(result) == 1, do: List.first(result), else: result)}
+    if(length(result) == 1, do: List.first(result), else: result)
   end
 
   @doc """
@@ -37,7 +37,7 @@ defmodule Jaqex do
   """
   @spec filter_file(Path.t(), String.t(), Path.t()) :: {:ok, term} | {:error, term}
   def filter_file(fname, code, path \\ "") do
-    filter_file!(fname, code, path)
+    {:ok, filter_file!(fname, code, path)}
   rescue
     e -> error(e)
   end
@@ -48,7 +48,7 @@ defmodule Jaqex do
   @spec filter_file!(Path.t(), String.t(), Path.t()) :: term
   def filter_file!(fname, code, path \\ "") do
     result = nif_filter_file(fname, code, path)
-    {:ok, if(length(result) == 1, do: List.first(result), else: result)}
+    if(length(result) == 1, do: List.first(result), else: result)
   end
 
   defp error(%ErlangError{original: err}), do: {:error, err}
