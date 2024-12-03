@@ -1,4 +1,5 @@
 *.ez
+.elixir_ls/
 /.fetch
 /_build/
 /cover/
