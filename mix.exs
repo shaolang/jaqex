@@ -24,7 +24,8 @@ defmodule Jaqex.MixProject do
   defp aliases do
     [
       "gen.checksums": &gen_checksums/1,
-      "build.local": "FORCE_JAQEX_BUILD=1 compile"
+      "test.local": &test_local/1,
+      "test.watch.local": &test_watch_local/1
     ]
   end
 
@@ -66,7 +67,7 @@ defmodule Jaqex.MixProject do
         "native/jaqex/README.md",
         "native/jaqex/src",
         "priv/test.json"
-      ],
+      ]
     ]
   end
 
@@ -78,4 +79,16 @@ defmodule Jaqex.MixProject do
       env: [{"FORCE_JAQEX_BUILD", "true"}]
     )
   end
+
+  defp run_tests(cmd) do
+    System.cmd(
+      "mix",
+      [cmd],
+      into: IO.stream(),
+      env: [{"FORCE_JAQEX_BUILD", "true"}]
+    )
+  end
+
+  defp test_local(_), do: run_tests("test")
+  defp test_watch_local(_), do: run_tests("test.watch")
 end
