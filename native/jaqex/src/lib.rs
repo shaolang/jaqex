@@ -36,7 +36,7 @@ fn filter(json_doc: &str, code: &str, path: &str) -> Result<impl Encoder, Error>
 fn create_filter(code: &str, path: &str) -> Result<Filter<Native<Val>>, Error> {
     let loader = Loader::new(jaq_std::defs().chain(jaq_json::defs()));
     let arena = Arena::default();
-    let path = path.into();
+    let path: String = path.into();
     let modules = loader
         .load(&arena, JaqFile { path, code })
         .map_err(|_| Error::RaiseAtom("invalid_filter"))?;

@@ -1,6 +1,6 @@
 [package]
 name = 'jaqex'
-version = '0.1.0'
+version = '0.1.1'
 authors = ['Shaolang Ai']
 edition = '2021'
 
@@ -10,9 +10,9 @@ path = 'src/lib.rs'
 crate-type = ['cdylib']
 
 [dependencies]
-jaq-core   = '2.0.0-delta'
-jaq-std    = '2.0.0-delta'
-jaq-json   = { version = '1.0.0-delta', features = ['serde_json'] }
+jaq-core   = '2.0.0'
+jaq-std    = '2.0.0'
+jaq-json   = { version = '1.0.0', features = ['serde_json'] }
 rustler    = { version = '0.35.0', features = ['serde'] }
 serde_json = '1.0.133'
 

@@ -2,7 +2,7 @@ defmodule Jaqex.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/shaolang/jaqex"
-  @version "0.1.0"
+  @version "0.1.1"
 
   def project do
     [
@@ -23,7 +23,8 @@ defmodule Jaqex.MixProject do
 
   defp aliases do
     [
-      "gen.checksums": &gen_checksums/1
+      "gen.checksums": &gen_checksums/1,
+      "build.local": "FORCE_JAQEX_BUILD=1 compile"
     ]
   end
 
