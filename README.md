@@ -27,8 +27,14 @@ To this:
 
 ```elixir
 [
-    %{"open" => 229.52, "high": 229.65, "low" => 223.74, "close" => 226.21, "date" => "2024-10-01", "ticker" => "AAPL", "adjusted": true},
-    %{"open" => 225.89, "high": 227.37, "low" => 223.02, "close" => 226.78, "date" => "2024-10-02", "ticker" => "AAPL", "adjusted": true},
+    %{
+        "open" => 229.52, "high": 229.65, "low" => 223.74, "close" => 226.21,
+        "date" => "2024-10-01", "ticker" => "AAPL", "adjusted": true
+    },
+    %{
+        "open" => 225.89, "high": 227.37, "low" => 223.02, "close" => 226.78,
+        "date" => "2024-10-02", "ticker" => "AAPL", "adjusted": true
+   },
 ]
 ```
 
@@ -54,7 +60,10 @@ Comparing that with using Jaqex:
 ```elixir
 result = Jaqex.filter!(
     json_string,
-    "[. as $parent | .prices[] | {open: .o, high: .h, low: .l, close: .c, date: .d, ticker: $parent.ticker, adjusted: $parent.ticker}]"
+    "[. as $root | .prices[] |
+        {open: .o, high: .h, low: .l, close: .c,
+         date: .d, ticker: $root.ticker, adjusted: $root.adjusted}
+    ]"
 )
 ```
 
