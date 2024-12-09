@@ -24,6 +24,14 @@ defmodule JaqexTest do
     test "returns error tuple when given json_doc is invalid" do
       assert Jaqex.filter("[1, 2, 3", ".[]") == {:error, :invalid_json}
     end
+
+    test "supports loading external jq files from given path" do
+      given = Jason.encode!(["fooBar", "barBaz"])
+      filter = "import \"t\" as t; .[] | t::snake_case(.)"
+      actual = Jaqex.filter(given, filter, "priv")
+
+      assert actual == {:ok, ["foo_bar", "bar_baz"]}
+    end
   end
 
   describe "filter!/3" do

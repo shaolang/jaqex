@@ -27,10 +27,14 @@ defmodule Jaqex do
   Filter the given JSON string with the given j(a)q code, raising on errors.
   """
   @spec filter!(String.t(), String.t(), Path.t()) :: term
-  def filter!(json_doc, code, path \\ "") do
+  def filter!(json_doc, code, path \\ "")
+
+  def filter!(json_doc, code, path) when is_binary(json_doc) do
     result = nif_filter(json_doc, code, path)
     if(length(result) == 1, do: List.first(result), else: result)
   end
+
+  def filter!(_, _, _), do: raise("Given json_doc is not a string/binary")
 
   @doc """
   Filter the JSON in the given file with the given j(a)q code.
@@ -52,6 +56,7 @@ defmodule Jaqex do
   end
 
   defp error(%ErlangError{original: err}), do: {:error, err}
+  defp error(%ArgumentError{message: msg}), do: {:error, msg}
 
   defp nif_filter(_json_doc, _code, _path), do: :erlang.nif_error(:nif_not_loaded)
 
