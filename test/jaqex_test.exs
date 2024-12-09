@@ -1,5 +1,6 @@
 defmodule JaqexTest do
   use ExUnit.Case
+  doctest Jaqex
 
   describe "filter/3" do
     for {code, given, expected} <- [

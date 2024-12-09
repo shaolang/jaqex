@@ -40,7 +40,6 @@ To this:
 
 The following shows how it's done using Elixir and Jason:
 
-
 ```elixir
 doc = Jason.decode!(json_string)    # assuming the contents are in json_string
 renames = %{"o" => "open", "h" => "high", "l" => "low", "c" => "close", "d" => "date"}
@@ -69,8 +68,6 @@ result = Jaqex.filter!(
 
 Jaq/jq filters make transformations as such straightforward.
 
-[diff]: https://github.com/01mf02/jaq/blob/main/README.md#differences-between-jq-and-jaq
-
 ## Installation
 
 Add `jaqex` to your list of dependencies in `mix.exs`:
@@ -84,6 +81,8 @@ end
 ```
 
 ## Copyright and License
-Copyright© 2024, Shaolang Ai
+Copyright © 2024, Shaolang Ai
 
 Distributed under the MIT License
+
+[diff]: https://github.com/01mf02/jaq/blob/main/README.md#differences-between-jq-and-jaq

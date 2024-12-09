@@ -14,7 +14,23 @@ defmodule Jaqex do
     version: version
 
   @doc """
-  Filter the given JSON string with the given j(a)q code.
+  Filters the given JSON string with the given j(a)q code and loading `.jq` scripts
+  in the given path.
+
+  ## Examples
+
+  ```
+  iex> Jaqex.filter("[1, 2, 3]", "[ .[] | {v: .} ]")
+  {:ok, [%{"v" => 1}, %{"v" => 2}, %{"v" => 3}]}
+  ```
+
+  Assuming `priv/` contains a jq script `t.jq`, the following demonstrates Jaqex loading that
+  and availing it for use by your filter code:
+
+  ```
+  iex> Jaqex.filter("[\\"fooBar\\"]", "import \\"t\\" as t; [ .[] | t::snake_case(.) ]", "priv")
+  {:ok, ["foo_bar"]}
+  ```
   """
   @spec filter(String.t(), String.t(), Path.t()) :: {:ok, term} | {:error, term}
   def filter(json_doc, code, path \\ "") do
@@ -24,7 +40,7 @@ defmodule Jaqex do
   end
 
   @doc """
-  Filter the given JSON string with the given j(a)q code, raising on errors.
+  Similar to `filter/3` but raises on errors.
   """
   @spec filter!(String.t(), String.t(), Path.t()) :: term
   def filter!(json_doc, code, path \\ "")
@@ -37,7 +53,7 @@ defmodule Jaqex do
   def filter!(_, _, _), do: raise("Given json_doc is not a string/binary")
 
   @doc """
-  Filter the JSON in the given file with the given j(a)q code.
+  Similar to `filter_file/3` but loads the json doc at the given path.
   """
   @spec filter_file(Path.t(), String.t(), Path.t()) :: {:ok, term} | {:error, term}
   def filter_file(fname, code, path \\ "") do
@@ -47,7 +63,7 @@ defmodule Jaqex do
   end
 
   @doc """
-  Filter the JSON in the given file with the given j(a)q code, raising on errors.
+  Similar to `filter_file/3` but raises on errors.
   """
   @spec filter_file!(Path.t(), String.t(), Path.t()) :: term
   def filter_file!(fname, code, path \\ "") do
