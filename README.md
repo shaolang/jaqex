@@ -16,9 +16,16 @@ we have transform the following JSON doc from this:
 {
     "ticker": "AAPL",
     "adjusted": true,
-    "prices": [
-        {"o": 229.52, "h": 229.65, "l": 223.74, "c": 226.21, "d": "2024-10-01"},
-        {"o": 225.89, "h": 227.37, "l": 223.02, "c": 226.78, "d": "2024-10-02"}
+    "data": [
+      [229.52, 229.65, 223.74, 226.21, "2024-10-01"],
+      [225.89, 227.37, 223.02, 226.78, "2024-10-02"]
+    ],
+    "fields": [
+      {"field": "open", "type": "float"},
+      {"field": "high", "type": "float"},
+      {"field": "low",  "type": "float"},
+      {"field": "close","type": "float"},
+      {"field": "date", "type": "date"}
     ]
 }
 ```
@@ -38,18 +45,15 @@ To this:
 ]
 ```
 
-The following shows how it's done using Elixir and Jason:
+Assuming the positions of the values aren't fixed and there may be additions to
+the fields and values, the following shows how it's done using Elixir and Jason:
 
 ```elixir
 doc = Jason.decode!(json_string)    # assuming the contents are in json_string
-renames = %{"o" => "open", "h" => "high", "l" => "low", "c" => "close", "d" => "date"}
-additions = Map.take(doc, ["ticker", "adjusted"])
-
+keys = doc["fields"] |> Enum.map(&Map.get(&1, "field"))
 result =
-    doc["prices"]
-    |> Stream.map(fn m ->
-        renames |> Stream.map(fn {original, new_name} -> {new_name, m[original]} end)
-    end)
+    doc["data"]
+    |> Stream.map(&Enum.zip(keys, &1))
     |> Stream.map(&Map.new/1)
     |> Enum.map(&Map.merge(&1, additions))
 ```
@@ -59,14 +63,21 @@ Comparing that with using Jaqex:
 ```elixir
 result = Jaqex.filter!(
     json_string,
-    "[. as $root | .prices[] |
-        {open: .o, high: .h, low: .l, close: .c,
-         date: .d, ticker: $root.ticker, adjusted: $root.adjusted}
+    "[. as $root
+      | .data[]
+      | [[$root.fields[] | .field], .]
+      | transpose
+      | map({key: .[0], value: .[1]})
+      | from_entries
+      | . + {ticker: $root.ticker, adjusted: $root.adjusted}
     ]"
 )
 ```
 
-Jaq/jq filters make transformations as such straightforward.
+Jaq/jq filters make transformations as such straightforward (when you know jq-lang).
+Because Jaq's transformations are done in Rust, memory usage is much lower and transformation
+faster; native Elixir version requires creating multiple (interim/throwaway) lists and
+maps (`keys`, `additions`, the maps from `&Enum.zip(keys, &1)` and `&Map.new/1`).
 
 ## Installation
 
@@ -75,7 +86,7 @@ Add `jaqex` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:jaqex, "~> 0.1.2"}
+    {:jaqex, "~> 0.1.3"}
   ]
 end
 ```
