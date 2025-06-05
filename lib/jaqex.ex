@@ -53,7 +53,9 @@ defmodule Jaqex do
   def filter!(_, _, _), do: raise("Given json_doc is not a string/binary")
 
   @doc """
-  Similar to `filter_file/3` but loads the json doc at the given path.
+  Similar to `filter/3` but loads the json doc at the given path. Note that the
+  file is opened in "Rust-land", thus bypassing any potential issues the BEAM may
+  cause when processing large binaries.
   """
   @spec filter_file(Path.t(), String.t(), Path.t()) :: {:ok, term} | {:error, term}
   def filter_file(fname, code, path \\ "") do
