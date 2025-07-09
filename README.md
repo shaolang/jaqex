@@ -63,13 +63,14 @@ Comparing that with using Jaqex:
 ```elixir
 result = Jaqex.filter!(
     json_string,
-    "[. as $root
+    "[
+      {ticker, adjusted} as $additions
+      | [.fields[] | .field] as $fields
       | .data[]
-      | [[$root.fields[] | .field], .]
+      | [$fields, .]
       | transpose
       | map({key: .[0], value: .[1]})
-      | from_entries
-      | . + {ticker: $root.ticker, adjusted: $root.adjusted}
+      | from_entries + $additions
     ]"
 )
 ```
