@@ -2,7 +2,7 @@ defmodule Jaqex.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/shaolang/jaqex"
-  @version "0.1.4"
+  @version "0.1.5"
 
   def project do
     [
@@ -31,11 +31,11 @@ defmodule Jaqex.MixProject do
 
   defp deps do
     [
-      {:ex_doc, "~> 0.35", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.40", only: :dev, runtime: false},
       {:jason, "~> 1.4"},
-      {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false},
-      {:rustler, "~> 0.35", optional: true, runtime: false},
-      {:rustler_precompiled, "~> 0.8"}
+      {:mix_test_watch, "~> 1.4", only: [:dev, :test], runtime: false},
+      {:rustler, "~> 0.38", optional: true, runtime: false},
+      {:rustler_precompiled, "~> 0.9"}
     ]
   end
 
@@ -44,7 +44,7 @@ defmodule Jaqex.MixProject do
       main: "readme",
       name: "Jaqex",
       source_ref: "v#{@version}",
-      canonical: "https://hexdocs.pm/jaqex",
+      canonical: "https://jaqex.hexdocs.pm",
       source_url: @source_url,
       extras: ["README.md"]
     ]
