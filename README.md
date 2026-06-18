@@ -87,7 +87,7 @@ Add `jaqex` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:jaqex, "~> 0.1.3"}
+    {:jaqex, "~> 0.1.5"}
   ]
 end
 ```
